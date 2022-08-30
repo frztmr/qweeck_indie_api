@@ -15,5 +15,4 @@ const dbConf = mysql.createPool({
     //noneedport cause its default
 })
 
-
 module.exports = { dbConf }

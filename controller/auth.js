@@ -14,7 +14,6 @@ module.exports = {
                 res.status(200).send(results);
             })
     },
-
     register: (req, res) => {
         console.log(req.body);
         let {
@@ -39,7 +38,6 @@ module.exports = {
             }
         )
     },
-
     login: (req, res) => {
         let { username, password } = req.body;
         dbConf.query(
@@ -76,12 +74,7 @@ module.exports = {
 
                 //     })
             })
-
-
-
-
     },
-
     keepLogin: async (req, res) => {
         try {
             let resultsUser = await dbQuery(`Select * FROM users 
@@ -101,13 +94,11 @@ module.exports = {
                     token
                 })
             }
-
         } catch (error) {
             console.log('Error query SQL :', error);
             res.status(500).send(error);
         }
     },
-
     usernameChecker: (req, res) => {
         let { username } = req.body;
         dbConf.query(
@@ -120,7 +111,6 @@ module.exports = {
                 )
             })
     },
-
     verification: async (req, res) => {
         try {
             console.log(req.dataToken)
@@ -162,6 +152,4 @@ module.exports = {
             });
         }
     }
-    
-
 }

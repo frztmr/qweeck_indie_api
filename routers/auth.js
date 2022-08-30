@@ -15,5 +15,4 @@ route.get('/keepLogin', authController.keepLogin)
 
 route.post('/check',authController.usernameChecker)
 
-
 module.exports = route;

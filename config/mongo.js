@@ -14,7 +14,6 @@ const user_db = mongoose.Schema({
     following: [],
     followers: []
 })
-
 const post_db = mongoose.Schema({
     username:String,
     text:String,

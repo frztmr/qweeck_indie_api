@@ -18,7 +18,6 @@ module.exports = function (data) {
     }
 
     //password verval
-    
     if (validator.isEmpty(data.password)) {
         error.password = 'Password belum diisi!'
     }

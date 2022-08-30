@@ -32,7 +32,6 @@ dbConf.getConnection((error, connection) => {
     console.log(`DB has been connected ${connection.threadId}`)
 })
 
-
 //FIND USERNAME IN GLOBAL (MYSQL UNCHECK)
 // App.get('/users', (req, res) => {
 //     userCollection.find(req.query, (err, data) => {
@@ -55,16 +54,7 @@ dbConf.getConnection((error, connection) => {
 
 // })
 
-
-
-
-
-
-
-
-
 //===============MONGODB AREA========================
-
 //MONGO CONFIG
 // const mongoose = require('mongoose')
 // const { mongoAccessURL,
@@ -86,9 +76,6 @@ dbConf.getConnection((error, connection) => {
 //     })
 // })
 
-
-
-
 //SPESIFIC USERNAME FOR CREATE ACC (MONGODB)
 // App.get('/users', (req, res) => {
 //     userCollection.findOne({ username: req.body.username })
@@ -98,10 +85,7 @@ dbConf.getConnection((error, connection) => {
 //                 return res.status(500).json(error)
 //             }
 //         })
-
 // })
-
-
 
 //POST (CREATE AN ACCOUNT) VIA MONGODB
 // App.post('/users', (req, res) => {
