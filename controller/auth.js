@@ -1,5 +1,6 @@
 const { dbConf } = require('../config/db')
-const { hashPassword, createToken } = require('../config/encrypts')
+const { hashPassword,
+    createToken } = require('../config/encrypts')
 const { transport } = require('../config/nodemailer');
 
 // const time = getTime
@@ -29,7 +30,7 @@ module.exports = {
                 }
                 console.log('RESULTS', results);
                 res.status(200).send(results);
-                
+
             })
     },
 
@@ -56,8 +57,10 @@ module.exports = {
         } = req.body;
         dbConf.query(
             `INSERT INTO post (username, time, text, imgRef ) 
-            values (${dbConf.escape(username)}, ${dbConf.escape(time)},  
-            ${dbConf.escape(text)}, ${dbConf.escape(imgRef)});`,
+            values (${dbConf.escape(username)},
+            ${dbConf.escape(time)},  
+            ${dbConf.escape(text)}, 
+            ${dbConf.escape(imgRef)});`,
             (err, results) => {
                 if (err) {
                     console.log('Error QUERY SQL:', err);
@@ -79,7 +82,8 @@ module.exports = {
             text,
         } = req.body;
         dbConf.query(
-            `UPDATE post SET ${dbConf.escape(text)} WHERE ${dbConf.escape(idpost)};`,
+            `UPDATE post SET ${dbConf.escape(text)} 
+            WHERE ${dbConf.escape(idpost)};`,
             (err, results) => {
                 if (err) {
                     console.log('Error QUERY SQL:', err);
@@ -101,7 +105,8 @@ module.exports = {
             // followers
         } = req.body;
         dbConf.query(
-            `DELETE FROM reaction WHERE comment=${dbConf.escape(username)};`,
+            `DELETE FROM reaction WHERE 
+            comment=${dbConf.escape(username)};`,
             (err, results) => {
                 if (err) {
                     console.log('Error QUERY SQL:', err);
@@ -115,11 +120,11 @@ module.exports = {
             }
         )
     },
-    
+
 
     profile: (req, res) => {
         console.log(req.body);
-        let {  
+        let {
             username,
             pict,
             status,
@@ -129,7 +134,8 @@ module.exports = {
         dbConf.query(
             `INSERT INTO profile (username, pict, status,) 
             values (${dbConf.escape(username)},  
-            ${dbConf.escape(pict)}, ${dbConf.escape(status)});`,
+            ${dbConf.escape(pict)}, 
+            ${dbConf.escape(status)});`,
             (err, results) => {
                 if (err) {
                     console.log('Error QUERY SQL:', err);
@@ -174,7 +180,8 @@ module.exports = {
             // followers
         } = req.body;
         dbConf.query(
-            `DELETE FROM reaction WHERE like=${dbConf.escape(username)};`,
+            `DELETE FROM reaction WHERE 
+            like=${dbConf.escape(username)};`,
             (err, results) => {
                 if (err) {
                     console.log('Error QUERY SQL:', err);
@@ -191,16 +198,17 @@ module.exports = {
     comment: (req, res) => {
         console.log(req.body);
         let {
-            
+
             username,
             comment
-            
+
             // following,
             // followers
         } = req.body;
         dbConf.query(
             `INSERT INTO reaction (username, comment) 
-            values (${dbConf.escape(username)}, ${dbConf.escape(comment)});`,
+            values (${dbConf.escape(username)}, 
+            ${dbConf.escape(comment)});`,
             (err, results) => {
                 if (err) {
                     console.log('Error QUERY SQL:', err);
@@ -223,7 +231,8 @@ module.exports = {
         } = req.body;
         dbConf.query(
             `INSERT INTO USERS (username, email, password ) 
-            values (${dbConf.escape(username)}, ${dbConf.escape(email)},  
+            values (${dbConf.escape(username)}, 
+            ${dbConf.escape(email)},  
             ${dbConf.escape(hashPassword(password))});`,
             (err, results) => {
                 if (err) {
@@ -241,8 +250,10 @@ module.exports = {
     login: (req, res) => {
         let { username, password } = req.body;
         dbConf.query(
-            `SELECT * FROM users WHERE username=${dbConf.escape(username)} 
-            AND password=${dbConf.escape(hashPassword(password))};`,
+            `SELECT * FROM users WHERE 
+            username=${dbConf.escape(username)} 
+            AND 
+            password=${dbConf.escape(hashPassword(password))};`,
             (err, results) => {
                 if (!results) {
                     res.status(500).send(err)
@@ -281,11 +292,6 @@ module.exports = {
             WHERE username=${dbConf.escape(req.dataToken.username)};`)
 
             if (resultsUser.length > 0) {
-                // let resultsCart = await dbQuery(`Select u.iduser, p.idproduct, p.name, p.images, p.brand, 
-                // p.category, p.price, c.qty, p.price*c.qty as totalPrice from users u
-                // JOIN carts c ON u.iduser=c.user_id
-                // JOIN products p ON p.idproduct = c.product_id 
-                // WHERE username=${dbConf.escape(resultsUser[0].username)};`)
 
                 let token = createToken({ ...resultsUser[0] });
                 res.status(200).send({
