@@ -11,7 +11,7 @@ App.use(cors());
 
 //CONFIGURE ROUTERS
 const { authRouter } = require('./routers');
-const { connection } = require('mongoose');
+//const { connection } = require('mongoose');
 App.use('/auth', authRouter)
 
 //LISTEN TO THE PORT

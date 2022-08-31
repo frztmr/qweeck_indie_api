@@ -2,6 +2,11 @@ const { dbConf } = require('../config/db')
 const { hashPassword, createToken } = require('../config/encrypts')
 const { transport } = require('../config/nodemailer');
 
+// const time = getTime
+// const getTime = new Date().getTime()
+
+
+
 module.exports = {
     getData: (req, res) => {
         dbConf.query(`SELECT * FROM users;`,
@@ -13,6 +18,201 @@ module.exports = {
                 console.log('RESULTS', results);
                 res.status(200).send(results);
             })
+    },
+
+    getPost: (req, res) => {
+        dbConf.query(`SELECT * FROM post;`,
+            (err, results) => {
+                if (err) {
+                    console.log('ERROR QUERY SQL', err)
+                    res.status(500).send(err);
+                }
+                console.log('RESULTS', results);
+                res.status(200).send(results);
+                
+            })
+    },
+
+    getUser: (req, res) => {
+        dbConf.query(`SELECT * FROM users;`,
+            (err, results) => {
+                if (err) {
+                    console.log('ERROR QUERY SQL', err)
+                    res.status(500).send(err);
+                }
+                console.log('RESULTS', results);
+                res.status(200).send(results);
+                results
+            })
+    },
+
+    post: (req, res) => {
+        console.log(req.body);
+        let {
+            username,
+            time,
+            text,
+            imgRef,
+        } = req.body;
+        dbConf.query(
+            `INSERT INTO post (username, time, text, imgRef ) 
+            values (${dbConf.escape(username)}, ${dbConf.escape(time)},  
+            ${dbConf.escape(text)}, ${dbConf.escape(imgRef)});`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'Post success',
+                    results: results
+                })
+            }
+        )
+    },
+
+    edit: (req, res) => {
+        console.log(req.body);
+        let {
+            idpost,
+            text,
+        } = req.body;
+        dbConf.query(
+            `UPDATE post SET ${dbConf.escape(text)} WHERE ${dbConf.escape(idpost)};`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'Edit Post success',
+                    results: results
+                })
+            }
+        )
+    },
+    delete: (req, res) => {
+        console.log(req.body);
+        let {
+            username,
+            // following,
+            // followers
+        } = req.body;
+        dbConf.query(
+            `DELETE FROM reaction WHERE comment=${dbConf.escape(username)};`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'DELETE post success',
+                    results: results
+                })
+            }
+        )
+    },
+    
+
+    profile: (req, res) => {
+        console.log(req.body);
+        let {  
+            username,
+            pict,
+            status,
+            // following,
+            // followers
+        } = req.body;
+        dbConf.query(
+            `INSERT INTO profile (username, pict, status,) 
+            values (${dbConf.escape(username)},  
+            ${dbConf.escape(pict)}, ${dbConf.escape(status)});`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'profiling success',
+                    results: results
+                })
+            }
+        )
+    },
+    like: (req, res) => {
+        console.log(req.body);
+        let {
+            username,
+            // following,
+            // followers
+        } = req.body;
+        dbConf.query(
+            `INSERT INTO reaction (like) 
+            values (${dbConf.escape(username)});`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'add like success',
+                    results: results
+                })
+            }
+        )
+    },
+    unlike: (req, res) => {
+        console.log(req.body);
+        let {
+            username,
+            // following,
+            // followers
+        } = req.body;
+        dbConf.query(
+            `DELETE FROM reaction WHERE like=${dbConf.escape(username)};`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'add like success',
+                    results: results
+                })
+            }
+        )
+    },
+    comment: (req, res) => {
+        console.log(req.body);
+        let {
+            
+            username,
+            comment
+            
+            // following,
+            // followers
+        } = req.body;
+        dbConf.query(
+            `INSERT INTO reaction (username, comment) 
+            values (${dbConf.escape(username)}, ${dbConf.escape(comment)});`,
+            (err, results) => {
+                if (err) {
+                    console.log('Error QUERY SQL:', err);
+                    res.status(500).send(err)
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'add like success',
+                    results: results
+                })
+            }
+        )
     },
     register: (req, res) => {
         console.log(req.body);
@@ -33,7 +233,7 @@ module.exports = {
                 res.status(200).send({
                     success: true,
                     message: 'register success',
-                    results
+                    results: results
                 })
             }
         )
@@ -111,6 +311,7 @@ module.exports = {
                 )
             })
     },
+
     verification: async (req, res) => {
         try {
             console.log(req.dataToken)
